@@ -82,16 +82,22 @@ export default function CartPage() {
   const onSuccess = async (reference: any) => {
     setIsProcessing(true);
 
-    // 1. Save to Supabase
-    const { error } = await supabase.from('orders').insert([{
-      customer_name: `${formData.firstName} ${formData.lastName}`,
-      customer_email: formData.email,
-      total_amount: `₦${cartTotal.toLocaleString()}`,
-      status: 'Pending',
-      items: cart
-    }]);
+    try {
+      const verifyResponse = await fetch('/api/verify-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reference: reference.reference,
+          cart,
+          formData,
+        }),
+      });
 
-    if (!error) {
+      if (!verifyResponse.ok) {
+        const errorData = await verifyResponse.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Unable to verify payment.');
+      }
+
       // 2. Trigger the automated Thank You email
       await fetch('/api/order-confirmation', {
         method: 'POST',
@@ -111,19 +117,13 @@ export default function CartPage() {
       
       // NEW: Clear the cart now that they have bought the items!
       clearCart();
-    } else {
-      console.error("Order save error:", error);
-      alert("Payment successful, but there was an issue recording your order. Please check your email.");
+    } catch (error) {
+      console.error("Payment verification error:", error);
+      alert("Payment was received, but we couldn't verify your order automatically. Please contact support with your payment reference.");
+    } finally {
+      setIsProcessing(false);
     }
-    
-    setIsProcessing(false);
   };
-
-  const onClose = () => {
-    alert("Payment cancelled. You can try again when you're ready.");
-  };
-
-
 
   const handleProceedToPayment = (e: React.FormEvent) => {
     e.preventDefault();
