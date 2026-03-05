@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import PaystackPop from '@paystack/inline-js';
 import { supabase } from "@/utils/supabase";
 
 interface CartItemType {
@@ -125,9 +124,11 @@ export default function CartPage() {
     }
   };
 
-  const handleProceedToPayment = (e: React.FormEvent) => {
+  const handleProceedToPayment =  async (e: React.FormEvent) => {
     e.preventDefault();
     
+    const PaystackPop = (await import('@paystack/inline-js')).default;
+
     const paystack = new PaystackPop();
     
     paystack.newTransaction({
