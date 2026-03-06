@@ -104,7 +104,7 @@ export default function CollectionPage({ params }: { params: Promise<{ slug: str
                     
                     <div className="relative overflow-hidden aspect-[2/3] mb-3 md:mb-5 bg-[#111]">
                       <Image
-                        src={product.image}
+                        src={product.image || "/placeholder.jpg"}
                         alt={product.name}
                         fill
                         loading="lazy"
