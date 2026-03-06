@@ -10,7 +10,7 @@ const csp = [
   "style-src 'self' 'unsafe-inline'",
 
   // Images
-  "img-src 'self' data: blob: https://res.cloudinary.com",
+  "img-src 'self' data: blob: https://res.cloudinary.com https://images.unsplash.com https://plus.unsplash.com",
 
   // API calls
   "connect-src 'self' https://api.paystack.co https://*.supabase.co https://api.cloudinary.com https://challenges.cloudflare.com",
