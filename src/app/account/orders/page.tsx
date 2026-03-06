@@ -24,19 +24,27 @@ export default function OrderHistoryPage() {
 
       setUserEmail(user.email || "");
 
-      // 2. Fetch all orders from Supabase that match this user's email
-      const { data, error } = await supabase
-        .from("orders")
-        .select("*")
-        .eq("customer_email", user.email)
-        .order("created_at", { ascending: false }); // Newest orders first
+      const { data: sessionData } = await supabase.auth.getSession();
+      const accessToken = sessionData.session?.access_token;
 
-      if (!error && data) {
-        setOrders(data);
-      } else {
-        console.error("Failed to fetch orders:", error);
+      if (!accessToken) {
+        router.push("/login");
+        return;
       }
-      
+
+      const response = await fetch("/api/account/orders", {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+
+      if (!response.ok) {
+        console.error("Failed to fetch orders");
+      } else {
+        const payload = await response.json();
+        setOrders(payload.data || []);
+      }
+
       setIsLoading(false);
     };
 
