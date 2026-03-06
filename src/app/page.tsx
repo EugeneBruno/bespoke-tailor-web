@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
-const collectionImages = [
-  "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1515347619152-00b12cb92a3e?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1550614000-4b95d4edfaea?q=80&w=800&auto=format&fit=crop",
+const heroImages = [
+  "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=1400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=1400&auto=format&fit=crop",
+  "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?q=80&w=1400&auto=format&fit=crop",
 ];
 
 export default function Home() {
@@ -15,124 +14,120 @@ export default function Home() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % collectionImages.length);
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % heroImages.length);
     }, 5000);
 
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <main className="min-h-screen bg-[#0B0B0B] text-gray-300 overflow-x-hidden">
-      
-      {/* 1. HERO SECTION */}
-      {/* ADJUSTED: Changed mobile padding from px-8 to px-6 for more breathing room */}
-      <section className="relative w-full min-h-[85vh] flex flex-col md:flex-row items-center justify-between px-6 md:px-24 py-12 md:py-20">
-         
-         <div className="md:w-1/2 z-10 flex flex-col items-start gap-6 mt-6 md:mt-0 w-full">
-           <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif text-[#D4AF37] leading-tight tracking-wide">
-             The Art of <br /> Personalization.
-           </h1>
-           <p className="text-base md:text-lg text-gray-400 max-w-md leading-relaxed">
-             Expertly crafted garments tailored to your unique measurements. Discover the luxurious side of modern fashion.
-           </p>
-           
-           {/* ADJUSTED: Changed to flex-col on mobile so buttons stack full-width for easy tapping */}
-           <div className="flex flex-col sm:flex-row w-full sm:w-auto gap-4 mt-6">
-             <Link 
-               href="/shop"
-               className="w-full sm:w-auto text-center bg-[#722F37] text-white px-8 py-4 text-sm tracking-widest hover:bg-[#5a252b] transition-all duration-300"
-             >
-               SHOP READY-TO-WEAR
-             </Link>
-             <Link 
-               href="/bespoke"
-               className="w-full sm:w-auto text-center border border-[#D4AF37] text-[#D4AF37] px-8 py-4 text-sm tracking-widest hover:bg-[#D4AF37] hover:text-black transition-all duration-300"
-             >
-               BOOK BESPOKE
-             </Link>
-           </div>
-         </div>
-
-         {/* Right Side: Featured Image */}
-         <div className="md:w-1/2 w-full flex justify-center md:justify-end mt-16 md:mt-0">
-             <div className="relative w-full max-w-md h-[55vh] sm:h-[60vh] md:h-[75vh]">
-               
-               <div className="absolute inset-0 w-full h-full rounded-t-[150px] md:rounded-t-full overflow-hidden shadow-2xl border-b-4 border-[#D4AF37]">
-                 {collectionImages.map((src, index) => (
-                   <img
-                     key={src}
-                     src={src}
-                     alt={`Luxury Fashion ${index + 1}`}
-                     className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ease-in-out ${
-                       index === currentImageIndex ? "opacity-100" : "opacity-0"
-                     }`}
-                   />
-                 ))}
-               </div>
-
-               {/* ADJUSTED: Changed bottom/left positioning to adapt to mobile screens */}
-               <div className="absolute bottom-4 -left-2 sm:-left-6 md:bottom-8 md:-left-8 bg-[#111111] border border-[#D4AF37] p-3 md:p-4 text-center z-20 shadow-xl">
-                 <p className="text-[#D4AF37] font-serif text-xl md:text-2xl">10+</p>
-                 <p className="text-[10px] md:text-xs tracking-widest text-gray-400">YEARS EXP.</p>
-               </div>
-             </div>
-         </div>
-      </section>
-
-      {/* 2. FEATURES STRIP */}
-      {/* ADJUSTED: Made gap smaller on mobile, reduced text size slightly so it fits neatly */}
-      <section className="w-full bg-[#111111] border-y border-gray-900 py-6 px-4 md:px-8 flex flex-wrap justify-center md:justify-around gap-4 md:gap-8 text-[10px] md:text-sm tracking-widest text-[#D4AF37]">
-        <div className="flex items-center gap-2 md:gap-3"><span>✦</span> 100% FIT GUARANTEE</div>
-        <div className="flex items-center gap-2 md:gap-3"><span>✦</span> PREMIUM FABRICS</div>
-        <div className="flex items-center gap-2 md:gap-3"><span>✦</span> ON-TIME DELIVERY</div>
-        <div className="flex items-center gap-2 md:gap-3"><span>✦</span> BESPOKE CONSULTATION</div>
-      </section>
-
-      {/* 3. THE COLLECTION GRID */}
-      <section className="w-full py-20 md:py-24 px-6 md:px-24 bg-[#0B0B0B]">
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-12 md:mb-16 gap-6">
-          <div>
-            <h2 className="text-4xl md:text-5xl font-serif text-[#D4AF37] mb-4">Our Collection</h2>
-            <p className="text-gray-400 max-w-md text-sm md:text-base">Discover timeless designs crafted to elevate your wardrobe, available for immediate purchase and preorder</p>
+    <main className="min-h-screen overflow-x-hidden bg-[#0B0B0B] text-[#A9A9A9]">
+      <section className="mx-auto grid min-h-[88vh] w-full max-w-[1400px] grid-cols-1 items-center gap-14 px-6 py-16 sm:px-10 md:gap-16 md:px-14 lg:grid-cols-2 lg:px-20 lg:py-24">
+        <div className="order-2 flex flex-col gap-8 lg:order-1">
+          <p className="luxury-label text-[11px] text-[#7F7B70]">COUTURE ATELIER · SPRING CHAPTER</p>
+          <h1 className="font-luxury text-5xl leading-[0.95] text-[#E2C979] sm:text-6xl md:text-7xl">
+            Silhouettes
+            <br />
+            in Quiet Gold.
+          </h1>
+          <p className="max-w-xl text-base leading-relaxed text-[#9A9A9A] md:text-lg">
+            A study in precision tailoring and modern romance. Discover limited pieces shaped for your movement,
+            your ritual, your name.
+          </p>
+          <div className="pt-4">
+            <Link
+              href="/shop"
+              className="luxury-label inline-flex border border-[#D4AF37] bg-transparent px-8 py-4 text-xs text-[#D4AF37] transition-all duration-300 hover:bg-[#D4AF37] hover:text-black"
+            >
+              DISCOVER THE COLLECTION
+            </Link>
           </div>
-          <Link href="/shop" className="text-[#D4AF37] border-b border-[#D4AF37] pb-1 hover:text-white hover:border-white transition-colors tracking-widest text-xs md:text-sm">
-            VIEW ALL PIECES ↗
-          </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 md:gap-10">
-          <div className="group cursor-pointer">
-            <div className="overflow-hidden h-[400px] md:h-[450px] mb-6">
-              <img src="https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" alt="Suit" />
-            </div>
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg md:text-xl font-serif text-white group-hover:text-[#D4AF37] transition-colors">The Royal Suit</h3>
-              <span className="text-gray-400 text-sm md:text-base">₦150,000</span>
-            </div>
+        <div className="order-1 flex justify-center lg:order-2 lg:justify-end">
+          <div className="relative h-[70vh] w-full max-w-[520px] overflow-hidden rounded-t-[260px] border border-[#2A2A2A] bg-[#111111]">
+            {heroImages.map((src, index) => (
+              <img
+                key={src}
+                src={src}
+                alt={`Editorial fashion ${index + 1}`}
+                className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-1000 ${
+                  index === currentImageIndex ? "opacity-100" : "opacity-0"
+                }`}
+              />
+            ))}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0B0B0B]/40 via-transparent to-transparent" />
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-[#1F1F1F] bg-[#0E0E0E] py-24">
+        <div className="mx-auto grid w-full max-w-[1400px] grid-cols-1 items-center gap-12 px-6 sm:px-10 md:gap-16 md:px-14 lg:grid-cols-2 lg:px-20">
+          <div className="overflow-hidden border border-[#272727]">
+            <img
+              src="https://images.unsplash.com/photo-1464863979621-258859e62245?q=80&w=1200&auto=format&fit=crop"
+              alt="Luxury portrait"
+              className="h-[520px] w-full object-cover"
+            />
           </div>
 
-          <div className="group cursor-pointer mt-0 md:mt-12">
-            <div className="overflow-hidden h-[400px] md:h-[450px] mb-6">
-              <img src="https://images.unsplash.com/photo-1550614000-4b95dd26cc63?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" alt="Dress" />
-            </div>
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg md:text-xl font-serif text-white group-hover:text-[#D4AF37] transition-colors">Wine Velvet Gown</h3>
-              <span className="text-gray-400 text-sm md:text-base">₦120,000</span>
-            </div>
-          </div>
+          <div className="space-y-8">
+            <p className="luxury-label text-[11px] text-[#7F7B70]">BRAND PHILOSOPHY</p>
+            <h2 className="font-luxury text-4xl leading-tight text-[#E2C979] sm:text-5xl">Crafted with Intention</h2>
+            <p className="max-w-xl text-base leading-relaxed text-[#9A9A9A]">
+              Every garment begins in conversation and ends in confidence. We merge timeless structure with expressive
+              detail to create pieces that feel both cinematic and deeply personal.
+            </p>
 
-          <div className="group cursor-pointer">
-            <div className="overflow-hidden h-[400px] md:h-[450px] mb-6">
-              <img src="https://images.unsplash.com/photo-1594938298596-70f56fb3cecb?q=80&w=600&auto=format&fit=crop" className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700" alt="Traditional" />
-            </div>
-            <div className="flex justify-between items-center">
-              <h3 className="text-lg md:text-xl font-serif text-white group-hover:text-[#D4AF37] transition-colors">Gold Accent Agbada</h3>
-              <span className="text-gray-400 text-sm md:text-base">₦200,000</span>
+            <div className="space-y-6">
+              {[
+                "Made-to-measure precision",
+                "Ethically sourced premium cloth",
+                "Private styling consultation",
+              ].map((item) => (
+                <div key={item} className="flex items-start gap-4 border-t border-[#252525] pt-5">
+                  <span className="mt-1 inline-block h-4 w-4 rounded-full border border-[#D4AF37]" />
+                  <p className="text-sm tracking-wide text-[#BCBCBC]">{item}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
+      <section className="py-24">
+        <div className="mx-auto grid w-full max-w-[1400px] grid-cols-1 items-center gap-12 px-6 sm:px-10 md:gap-16 md:px-14 lg:grid-cols-2 lg:px-20">
+          <div className="order-2 space-y-8 lg:order-1">
+            <p className="luxury-label text-[11px] text-[#7F7B70]">THE ELEGANCE EDIT</p>
+            <h2 className="font-luxury text-4xl leading-tight text-[#E2C979] sm:text-5xl">Poise in Every Detail</h2>
+            <p className="text-base leading-relaxed text-[#9A9A9A]">
+              Designed for evenings, ceremonies, and quiet power moments. Our couture process ensures each line,
+              drape, and finish lands with effortless grace.
+            </p>
+
+            <ul className="space-y-3 text-sm tracking-wide text-[#B6B6B6]">
+              <li>— Hand-finished seams and subtle structure</li>
+              <li>— Signature palettes inspired by warm metallic tones</li>
+              <li>— Seasonal drops with timeless longevity</li>
+            </ul>
+
+            <Link
+              href="/bespoke"
+              className="luxury-label inline-flex border border-[#D4AF37] px-8 py-4 text-xs text-[#D4AF37] transition-all duration-300 hover:bg-[#D4AF37] hover:text-black"
+            >
+              BOOK A BESPOKE CONSULTATION
+            </Link>
+          </div>
+
+          <div className="order-1 overflow-hidden border border-[#272727] lg:order-2">
+            <img
+              src="https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=1200&auto=format&fit=crop"
+              alt="Elegant lifestyle fashion"
+              className="h-[540px] w-full object-cover"
+            />
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

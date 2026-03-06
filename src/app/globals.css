@@ -1,1 +1,21 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@500;600;700&display=swap");
 @import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background: #0b0b0b;
+  color: #a9a9a9;
+  font-family: "Inter", var(--font-geist-sans), sans-serif;
+}
+
+.font-luxury {
+  font-family: "Playfair Display", Georgia, serif;
+}
+
+.luxury-label {
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+}
