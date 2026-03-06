@@ -42,7 +42,7 @@ export default function TrackOrderPage() {
   const getStepNumber = (status: string) => {
     const s = status?.toLowerCase() || '';
 
-    if (s.includes('pending') || s.includes('placed')) return 1;
+    if (s.includes('pending') || s.includes('placed') || s.includes('paid')) return 1;
     if (s.includes('processing') || s.includes('production') || s.includes('tailoring')) return 2;
     if (s.includes('shipped') || s.includes('transit')) return 3;
     if (s.includes('completed') || s.includes('delivered')) return 4;
