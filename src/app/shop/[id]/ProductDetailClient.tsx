@@ -174,7 +174,6 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
       <Script
         id="product-schema"
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
       
