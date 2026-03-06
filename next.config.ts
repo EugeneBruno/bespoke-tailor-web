@@ -2,11 +2,26 @@ import type { NextConfig } from "next";
 
 const csp = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://js.paystack.co https://widget.cloudinary.com",
+
+  // Scripts (Paystack + Turnstile + Cloudinary widget)
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://js.paystack.co https://challenges.cloudflare.com https://widget.cloudinary.com",
+
+  // Styles
   "style-src 'self' 'unsafe-inline'",
+
+  // Images
   "img-src 'self' data: blob: https://res.cloudinary.com",
-  "connect-src 'self' https://api.paystack.co https://*.supabase.co https://api.cloudinary.com",
+
+  // API calls
+  "connect-src 'self' https://api.paystack.co https://*.supabase.co https://api.cloudinary.com https://challenges.cloudflare.com",
+
+  // Iframes (CRITICAL FOR PAYMENTS & CAPTCHA)
+  "frame-src 'self' https://checkout.paystack.com https://challenges.cloudflare.com",
+
+  // Fonts
   "font-src 'self' data:",
+
+  // Prevent embedding your site elsewhere
   "frame-ancestors 'none'",
 ].join("; ");
 

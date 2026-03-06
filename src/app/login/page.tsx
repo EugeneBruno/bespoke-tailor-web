@@ -21,24 +21,51 @@ export default function LoginPage() {
   };
 
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setErrorMsg(null);
+  e.preventDefault();
+  setIsLoading(true);
+  setErrorMsg(null);
 
-    // Call Supabase to log the user in
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
-    });
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email: formData.email,
+    password: formData.password,
+  });
 
-    if (error) {
-      setErrorMsg(error.message);
-      setIsLoading(false);
-    } else {
-      // If successful, instantly redirect them to the shop
-      router.push("/shop"); 
-    }
-  };
+  if (error) {
+    setErrorMsg(error.message);
+    setIsLoading(false);
+    return;
+  }
+
+  // Get logged-in user
+  const { data: userData } = await supabase.auth.getUser();
+  const user = userData.user;
+
+  if (!user) {
+    router.replace("/");
+    return;
+  }
+
+  // Check role from profiles table
+  const { data: profile, error: profileError } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  if (profileError) {
+    console.error("Profile fetch error:", profileError);
+    router.replace("/");
+    return;
+  }
+
+  if (profile?.role === "admin") {
+    router.replace("/admin");
+  } else {
+    router.replace("/");
+  }
+};
+
+  
 
   return (
     <main className="min-h-screen bg-[#0B0B0B] text-gray-300 flex items-center justify-center px-6 py-20">

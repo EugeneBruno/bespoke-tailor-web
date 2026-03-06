@@ -82,8 +82,13 @@ export default function AdminDashboard() {
         return;
       }
 
-      const role = user.app_metadata?.role ?? user.user_metadata?.role;
-      if (role !== "admin") {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .maybeSingle();
+      
+      if (profile?.role !== "admin") {
         router.replace("/");
         return;
       }
