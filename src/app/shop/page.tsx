@@ -1,12 +1,4 @@
-import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Shop Ready-to-Wear Collections",
-  description:
-    "Browse IVFODI Clothing's ready-to-wear luxury fashion collections, including dresses, skirts, bubu, pants, and two-piece sets.",
-};
 
 const categories = [
   { name: "All", slug: "all", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=600&auto=format&fit=crop" },
@@ -46,7 +38,7 @@ export default function ShopLanding() {
                 // Disabled button for Kids
                 <div key={cat.name} className="flex flex-col items-center opacity-30 cursor-not-allowed">
                   <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden relative mb-5 border-2 border-transparent">
-                    <Image src={cat.image} alt={cat.name} fill loading="lazy" sizes="144px" className="object-cover object-top" />
+                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover object-top" />
                     <div className="absolute inset-0 bg-black/60"></div>
                     <div className="absolute inset-0 flex items-center justify-center p-2 text-center">
                       <span className="text-white text-[10px] md:text-xs tracking-widest uppercase font-serif drop-shadow-lg">{cat.name}</span>
@@ -62,13 +54,10 @@ export default function ShopLanding() {
                   className="flex flex-col items-center group cursor-pointer"
                 >
                   <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden relative mb-5 transition-all duration-500 border-2 border-transparent group-hover:border-[#D4AF37] group-hover:shadow-[0_0_15px_rgba(212,175,55,0.2)]">
-                    <Image
-                      src={cat.image}
-                      alt={cat.name}
-                      fill
-                      loading="lazy"
-                      sizes="144px"
-                      className="object-cover object-top group-hover:scale-110 transition-transform duration-700"
+                    <img 
+                      src={cat.image} 
+                      alt={cat.name} 
+                      className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
                     />
                     <div className="absolute inset-0 bg-black/60 group-hover:bg-black/30 transition-colors duration-500"></div>
                     

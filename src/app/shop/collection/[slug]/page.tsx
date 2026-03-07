@@ -1,17 +1,8 @@
 "use client";
 
 import { useState, useEffect, use } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { supabase } from "@/utils/supabase";
-
-type CollectionProduct = {
-  id: string;
-  name: string;
-  category: string;
-  image: string;
-  price: string;
-};
 
 const slugToCategory: Record<string, string> = {
   "all": "All",
@@ -27,7 +18,7 @@ export default function CollectionPage({ params }: { params: Promise<{ slug: str
   const resolvedParams = use(params);
   const { slug } = resolvedParams;
   
-  const [products, setProducts] = useState<CollectionProduct[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   
   // NEW: State to control how many products are visible (starts at 5)
@@ -103,13 +94,10 @@ export default function CollectionPage({ params }: { params: Promise<{ slug: str
                   <Link href={`/shop/${product.id}`} key={product.id} className="group cursor-pointer flex flex-col animate-in fade-in duration-700">
                     
                     <div className="relative overflow-hidden aspect-[2/3] mb-3 md:mb-5 bg-[#111]">
-                      <Image
-                        src={product.image || "/placeholder.jpg"}
-                        alt={product.name}
-                        fill
-                        loading="lazy"
-                        sizes="(max-width: 768px) 50vw, (max-width: 1280px) 33vw, 25vw"
-                        className="object-cover object-top group-hover:scale-105 transition-transform duration-700"
+                      <img 
+                        src={product.image} 
+                        alt={product.name} 
+                        className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-700"
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                       
