@@ -3,6 +3,12 @@
 import { useState } from "react";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Bespoke Services",
+  description:
+    "Book a fitting and get custom-made luxury fashion tailored to perfection.",
+};
+
 export default function BespokeForm() {
   const [step, setStep] = useState(1);
   const [isSubmitted, setIsSubmitted] = useState(false);

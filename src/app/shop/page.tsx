@@ -11,6 +11,11 @@ const categories = [
   { name: "Kids", slug: "kids", image: "https://images.unsplash.com/photo-1519241047957-be31d7379a5d?q=80&w=600&auto=format&fit=crop" },
 ];
 
+export const metadata = {
+  title: "Shop",
+  description: "Explore luxury dresses, bespoke pieces and elegant designs.",
+};
+
 export default function ShopLanding() {
   return (
     <main className="min-h-screen bg-[#0B0B0B] text-gray-300 py-20 px-4 md:px-12 lg:px-24 flex flex-col items-center justify-center">

@@ -10,6 +10,11 @@ const collectionImages = [
   "https://images.unsplash.com/photo-1550614000-4b95d4edfaea?q=80&w=800&auto=format&fit=crop",
 ];
 
+export const metadata = {
+  title: "Home",
+  description: "Discover timeless bespoke fashion crafted with elegance.",
+};
+
 export default function Home() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
