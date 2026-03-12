@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { formatPrice } from "@/lib/formatPrice";
 import { supabase } from "@/utils/supabase";
 
 export default function OrderHistoryPage() {
@@ -99,7 +100,7 @@ export default function OrderHistoryPage() {
                       </div>
                       <div>
                         <p className="text-[10px] text-gray-500 uppercase tracking-widest mb-1">Total Amount</p>
-                        <p className="text-sm text-[#D4AF37] font-bold">{order.total_amount}</p>
+                        <p className="text-sm text-[#D4AF37] font-bold">{formatPrice(Number(order.total_amount?.toString().replace(/[^0-9]/g, "") || 0))}</p>
                       </div>
                     </div>
                     <div className="flex flex-col items-start md:items-end">

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { formatPrice } from "@/lib/formatPrice";
 import { supabase } from "@/utils/supabase";
 
 export default function TrackOrderPage() {
@@ -84,7 +85,7 @@ export default function TrackOrderPage() {
               >
                 {orders.map(order => {
                   const date = new Date(order.created_at).toLocaleDateString();
-                  return <option key={order.id} value={order.id}>{date} - {order.total_amount}</option>
+                  return <option key={order.id} value={order.id}>{date} - {formatPrice(Number(order.total_amount?.toString().replace(/[^0-9]/g, "") || 0))}</option>
                 })}
               </select>
             </div>
