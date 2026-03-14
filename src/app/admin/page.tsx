@@ -35,6 +35,7 @@ export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<AdminTab>("products");
   const [orders, setOrders] = useState<Order[]>([]);
   const [messages, setMessages] = useState<Message[]>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const [adminToken, setAdminToken] = useState<string | null>(null);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -127,7 +128,14 @@ export default function AdminDashboard() {
         const data = await messagesResponse.json();
         setMessages(data.data || []);
       }
-    };
+
+      const { data: productsData } = await supabase
+        .from("products")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+       setProducts(productsData || []);
+      };
 
     fetchAdminData();
   }, [isAuthorized, adminToken]);
@@ -284,9 +292,20 @@ export default function AdminDashboard() {
           <div>
             <h1 className="text-4xl font-serif text-[#D4AF37] mb-6">Admin Control</h1>
             <div className="flex gap-4">
-              <button onClick={() => setActiveTab("products")}>PRODUCTS</button>
-              <button onClick={() => setActiveTab("orders")}>ORDERS</button>
-              <button onClick={() => setActiveTab("messages")}>MESSAGES</button>
+              {["products", "orders", "messages"].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab as AdminTab)}
+                  className={`px-4 py-2 border text-sm tracking-widest transition-colors
+                  ${
+                    activeTab === tab
+                      ? "border-[#D4AF37] text-[#D4AF37]"
+                      : "border-gray-700 text-gray-400 hover:text-white"
+                  }`}
+                >
+                  {tab.toUpperCase()}
+                </button>
+              ))}
             </div>
           </div>
           <Link href="/shop" className="text-sm tracking-widest text-gray-500 hover:text-white transition-colors">
@@ -295,80 +314,190 @@ export default function AdminDashboard() {
         </div>
 
         {activeTab === "products" && (
-          <form onSubmit={handleProductSubmit} className="bg-[#111111] border border-gray-800 p-8 flex flex-col gap-6 max-w-4xl">
-            {statusMessage && <p>{statusMessage.text}</p>}
-            <input required type="text" name="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Product name" />
-            <input required type="text" name="price" value={formData.price} onChange={(e) => setFormData({ ...formData, price: e.target.value })} placeholder="Price" />
-            <select value={formData.category} onChange={(e) => setFormData({ ...formData, category: e.target.value })}>
-              <option value="Dresses">Dresses</option>
-              <option value="Skirts">Skirts</option>
-              <option value="Bubu">Bubu</option>
-              <option value="Pants">Pants (Trousers)</option>
-              <option value="Tops & Jackets">Tops & Jackets</option>
-              <option value="Two Piece">Two Piece</option>
-            </select>
-            <textarea name="description" value={formData.description} onChange={(e) => setFormData({ ...formData, description: e.target.value })} placeholder="Description" />
-            <textarea name="details" value={formData.details} onChange={(e) => setFormData({ ...formData, details: e.target.value })} placeholder="Details comma-separated" />
-            <input
-              required
-              type="file"
-              id="frontImageInput"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={(e) => setImageFrontFile(e.target.files ? e.target.files[0] : null)}
-            />
-            <input
-              required
-              type="file"
-              id="backImageInput"
-              accept="image/jpeg,image/png,image/webp"
-              onChange={(e) => setImageBackFile(e.target.files ? e.target.files[0] : null)}
-            />
-            <button disabled={isSubmitting} className="bg-[#D4AF37] text-black p-3 font-bold">
-              {isSubmitting ? "UPLOADING..." : "ADD PRODUCT"}
-            </button>
-          </form>
+          <div className="grid lg:grid-cols-2 gap-10">
+
+            {/* PRODUCT FORM */}
+            <form
+              onSubmit={handleProductSubmit}
+              className="bg-[#111111] border border-gray-800 p-8 flex flex-col gap-6"
+            >
+              <h2 className="text-xl text-[#D4AF37] font-serif">Add New Product</h2>
+
+              {statusMessage && (
+                <p className={statusMessage.type === "error" ? "text-red-400" : "text-green-400"}>
+                  {statusMessage.text}
+                </p>
+              )}
+
+              <input
+                required
+                type="text"
+                placeholder="Product name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                className="bg-[#0B0B0B] border border-gray-700 p-3"
+              />
+
+              <input
+                required
+                type="text"
+                placeholder="Price"
+                value={formData.price}
+                onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                className="bg-[#0B0B0B] border border-gray-700 p-3"
+              />
+
+              <select
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                className="bg-[#0B0B0B] border border-gray-700 p-3"
+              >
+                <option>Dresses</option>
+                <option>Skirts</option>
+                <option>Bubu</option>
+                <option>Pants (Trousers)</option>
+                <option>Tops & Jackets</option>
+                <option>Two Piece</option>
+              </select>
+
+              <textarea
+                placeholder="Description"
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="bg-[#0B0B0B] border border-gray-700 p-3"
+              />
+
+              <textarea
+                placeholder="Details comma separated"
+                value={formData.details}
+                onChange={(e) => setFormData({ ...formData, details: e.target.value })}
+                className="bg-[#0B0B0B] border border-gray-700 p-3"
+              />
+
+            <div className="flex flex-col gap-2">
+                <label className="text-sm text-gray-400">Front Image</label>
+                <input
+                  required
+                  type="file"
+                  id="frontImageInput"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={(e) => setImageFrontFile(e.target.files?.[0] || null)}
+                  className="bg-[#0B0B0B] border border-gray-700 p-3 file:bg-[#D4AF37] file:text-black file:border-0 file:px-3 file:py-1 file:mr-3"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-gray-400">Back Image</label>
+                <input
+                  required
+                  type="file"
+                  id="backImageInput"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={(e) => setImageBackFile(e.target.files?.[0] || null)}
+                  className="bg-[#0B0B0B] border border-gray-700 p-3 file:bg-[#D4AF37] file:text-black file:border-0 file:px-3 file:py-1 file:mr-3"
+                />
+              </div>          
+
+              <button
+                disabled={isSubmitting}
+                className="bg-[#D4AF37] text-black p-3 font-bold"
+              >
+                {isSubmitting ? "UPLOADING..." : "ADD PRODUCT"}
+              </button>
+            </form>
+
+
+            {/* PRODUCT LIST */}
+            <div className="bg-[#111111] border border-gray-800 p-8">
+              <h2 className="text-xl text-[#D4AF37] font-serif mb-6">Existing Products</h2>
+
+              {products.length === 0 ? (
+                <p className="text-gray-500">No products yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {products.map((product) => (
+                    <div
+                      key={product.id}
+                      className="flex justify-between border border-gray-800 p-4"
+                    >
+                      <div>
+                        <p className="text-white">{product.name}</p>
+                        <p className="text-gray-400">₦{product.price}</p>
+                      </div>
+                      <span className="text-gray-500 text-sm">{product.category}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
         )}
 
         {activeTab === "orders" && (
-          <div className="space-y-3">
-            {orders.map((order) => (
-              <div key={order.id} className="border border-gray-800 p-4 flex justify-between items-center">
-                <div>
-                  <p>{order.customer_name}</p>
-                  <p>{order.total_amount}</p>
-                </div>
-                <select
-                  value={order.status}
-                  disabled={updatingOrderId === order.id}
-                  onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Processing">Processing</option>
-                  <option value="Shipped">Shipped</option>
-                  <option value="Delivered">Delivered</option>
-                </select>
+          <div className="space-y-4">
+            {orders.length === 0 ? (
+              <div className="border border-gray-800 p-8 text-center text-gray-500">
+                No orders yet.
               </div>
-            ))}
+            ) : (
+              orders.map((order) => (
+                <div key={order.id} className="border border-gray-800 p-4 flex justify-between items-center">
+                  <div>
+                    <p className="text-white">{order.customer_name}</p>
+                    <p className="text-gray-400">₦{order.total_amount}</p>
+                  </div>
+
+                  <select
+                    value={order.status}
+                    disabled={updatingOrderId === order.id}
+                    onChange={(e) => updateOrderStatus(order.id, e.target.value)}
+                    className="bg-[#0B0B0B] border border-gray-700 p-2"
+                  >
+                    <option>Paid</option>
+                    <option>Processing</option>
+                    <option>Shipped</option>
+                    <option>Delivered</option>
+                  </select>
+                </div>
+              ))
+            )}
           </div>
         )}
 
         {activeTab === "messages" && (
-          <div className="space-y-3">
-            {messages.map((msg) => (
-              <div key={msg.id} className="border border-gray-800 p-4">
-                <p>{msg.subject}</p>
-                <p>{msg.email}</p>
-                <p>{msg.message}</p>
-                <div className="flex gap-2 mt-3">
-                  <select value={msg.status} onChange={(e) => updateMessageStatus(msg.id, e.target.value)}>
-                    <option value="Unread">Unread</option>
-                    <option value="Read">Read</option>
-                    <option value="Replied">Replied</option>
-                  </select>
-                  <button onClick={() => setActiveReply(msg)} className="border border-gray-700 px-3 py-1">WRITE REPLY</button>
-                </div>
+          <div className="space-y-4">
+            {messages.length === 0 ? (
+              <div className="border border-gray-800 p-8 text-center text-gray-500">
+                No messages yet.
               </div>
-            ))}
+            ) : (
+              messages.map((msg) => (
+                <div key={msg.id} className="border border-gray-800 p-4">
+                  <p className="text-white">{msg.subject}</p>
+                  <p className="text-gray-400">{msg.email}</p>
+                  <p className="mt-2">{msg.message}</p>
+
+                  <div className="flex gap-2 mt-3">
+                    <select
+                      value={msg.status}
+                      onChange={(e) => updateMessageStatus(msg.id, e.target.value)}
+                      className="bg-[#0B0B0B] border border-gray-700 p-2"
+                    >
+                      <option>Unread</option>
+                      <option>Read</option>
+                      <option>Replied</option>
+                    </select>
+
+                    <button
+                      onClick={() => setActiveReply(msg)}
+                      className="border border-gray-700 px-3 py-1"
+                    >
+                      REPLY
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         )}
       </div>
