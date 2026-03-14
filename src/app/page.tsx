@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { formatPrice } from "@/lib/formatPrice";
 
 const collectionImages = [
   "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800&auto=format&fit=crop",
@@ -112,7 +113,7 @@ export default function Home() {
             </div>
             <div className="flex justify-between items-center">
               <h3 className="text-lg md:text-xl font-serif text-white group-hover:text-[#D4AF37] transition-colors">The Royal Suit</h3>
-              <span className="text-gray-400 text-sm md:text-base">₦150,000</span>
+              <span className="text-gray-400 text-sm md:text-base">{formatPrice(Number(150000))}</span>
             </div>
           </div>
 
@@ -122,7 +123,7 @@ export default function Home() {
             </div>
             <div className="flex justify-between items-center">
               <h3 className="text-lg md:text-xl font-serif text-white group-hover:text-[#D4AF37] transition-colors">Wine Velvet Gown</h3>
-              <span className="text-gray-400 text-sm md:text-base">₦120,000</span>
+              <span className="text-gray-400 text-sm md:text-base">{formatPrice(Number(120000))}</span>
             </div>
           </div>
 
@@ -132,7 +133,7 @@ export default function Home() {
             </div>
             <div className="flex justify-between items-center">
               <h3 className="text-lg md:text-xl font-serif text-white group-hover:text-[#D4AF37] transition-colors">Gold Accent Agbada</h3>
-              <span className="text-gray-400 text-sm md:text-base">₦200,000</span>
+              <span className="text-gray-400 text-sm md:text-base">{formatPrice(Number(200000))}</span>
             </div>
           </div>
         </div>
