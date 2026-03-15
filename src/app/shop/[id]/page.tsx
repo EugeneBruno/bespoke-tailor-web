@@ -3,7 +3,6 @@
 import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
-import { formatPrice } from "@/lib/formatPrice";
 import { supabase } from "@/utils/supabase";
 
 export default function ProductDetail({ params }: { params: Promise<{ id: string }> }) {
@@ -134,7 +133,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
 
   const sizeText = selectedSize ? ` in size ${selectedSize}` : "";
   const qtyText = quantity > 1 ? ` (${quantity} pieces)` : "";
-  const whatsappMessage = encodeURIComponent(`Hello! I'm interested in buying the ${product.name} (${formatPrice(Number(product.price))})${sizeText}${qtyText}.`);
+  const whatsappMessage = encodeURIComponent(`Hello! I'm interested in buying the ${product.name} (${product.price})${sizeText}${qtyText}.`);
 
   return (
     <main className="min-h-screen bg-[#0B0B0B] text-gray-300 py-16 px-8 md:px-24 animate-in fade-in duration-700 relative">
@@ -222,7 +221,7 @@ export default function ProductDetail({ params }: { params: Promise<{ id: string
         <div className="w-full md:w-1/2 flex flex-col pt-4">
           <p className="text-[#D4AF37] tracking-widest text-sm mb-2 uppercase">{product.category}</p>
           <h1 className="text-4xl md:text-5xl font-serif text-white mb-4">{product.name}</h1>
-          <p className="text-2xl text-gray-300 mb-8 tracking-wider">{formatPrice(Number(product.price))}</p>
+          <p className="text-2xl text-gray-300 mb-8 tracking-wider">{product.price}</p>
           
           {product.description && (
             <p className="text-gray-400 leading-relaxed mb-8">{product.description}</p>

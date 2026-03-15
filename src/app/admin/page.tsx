@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { formatPrice } from "@/lib/formatPrice";
 import { supabase } from "@/utils/supabase";
 
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
@@ -336,7 +335,7 @@ export default function AdminDashboard() {
               <div key={order.id} className="border border-gray-800 p-4 flex justify-between items-center">
                 <div>
                   <p>{order.customer_name}</p>
-                  <p>{formatPrice(Number(order.total_amount?.toString().replace(/[^0-9]/g, "") || 0))}</p>
+                  <p>{order.total_amount}</p>
                 </div>
                 <select
                   value={order.status}
