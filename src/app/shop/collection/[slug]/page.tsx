@@ -2,7 +2,6 @@
 
 import { useState, useEffect, use } from "react";
 import Link from "next/link";
-import { formatPrice } from "@/lib/formatPrice";
 import { supabase } from "@/utils/supabase";
 
 const slugToCategory: Record<string, string> = {
@@ -119,7 +118,7 @@ export default function CollectionPage({ params }: { params: Promise<{ slug: str
                         {product.name}
                       </h3>
                       <span className="text-xs md:text-sm text-[#D4AF37] tracking-wider">
-                        {formatPrice(Number(product.price))}
+                        {product.price}
                       </span>
                     </div>
                   </Link>
