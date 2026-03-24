@@ -35,11 +35,25 @@ export const metadata: Metadata = {
     "custom fashion Nigeria",
   ],
 
+  alternates: {
+    canonical: "https://ivfodi.com", // change to your real domain
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
+
   openGraph: {
     title: "IVFODI | Luxury Bespoke Fashion",
     description:
       "Timeless bespoke fashion crafted with elegance and precision.",
-    url: "https://ivfodi.com",
+    url: "https://ivfodi.com", // change to your real domain
     siteName: "IVFODI",
     images: [
       {
