@@ -55,9 +55,20 @@ export default function Navbar() {
   }, []);
 
   const handleLogout = async () => {
-    await supabase.auth.signOut();
+    const { error } = await supabase.auth.signOut();
+
+    if (error){ 
+      console.error("Logout error:", error);
+      return;
+    }
+
+    setUser(null);
+    setIsAdmin(false);
+
     setIsAccountOpen(false);
     setIsOpen(false);
+
+    router.refresh();
     router.push("/login");
   };
 

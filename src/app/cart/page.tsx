@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { formatPrice } from "@/lib/formatPrice";
 import { supabase } from "@/utils/supabase";
 
 interface CartItemType {
@@ -106,7 +107,7 @@ export default function CartPage() {
           email: formData.email,
           reference: reference.reference,
           items: cart,
-          total: `₦${cartTotal.toLocaleString()}`
+          total: formatPrice(cartTotal)
         })
       });
 
@@ -253,7 +254,7 @@ export default function CartPage() {
                           <span className="w-8 text-center text-xs text-white">{item.quantity}</span>
                           <button onClick={() => updateQuantity(item.id, item.size, item.quantity + 1)} className="w-8 h-full flex items-center justify-center text-gray-400 hover:text-[#D4AF37] hover:bg-[#1a1a1a] transition-colors">+</button>
                         </div>
-                        <p className="text-[#D4AF37] tracking-wider text-sm md:text-base">{item.price}</p>
+                        <p className="text-[#D4AF37] tracking-wider text-sm md:text-base">{formatPrice(Number(item.price))}</p>
                       </div>
                     </div>
                   </div>
@@ -314,7 +315,7 @@ export default function CartPage() {
               <div className="space-y-4 mb-6 border-b border-gray-800 pb-6">
                 <div className="flex justify-between text-gray-400 text-xs md:text-sm">
                   <span>Subtotal</span>
-                  <span>₦{cartTotal.toLocaleString()}</span>
+                  <span>{formatPrice(cartTotal)}</span>
                 </div>
                 <div className="flex justify-between text-gray-400 text-xs md:text-sm">
                   <span>Shipping</span>
@@ -324,7 +325,7 @@ export default function CartPage() {
 
               <div className="flex justify-between items-center mb-8">
                 <span className="text-white tracking-widest uppercase text-sm">Total</span>
-                <span className="text-[#D4AF37] text-lg md:text-xl tracking-wider">₦{cartTotal.toLocaleString()}</span>
+                <span className="text-[#D4AF37] text-lg md:text-xl tracking-wider">{formatPrice(cartTotal)}</span>
               </div>
 
               {!isCheckingOut ? (
