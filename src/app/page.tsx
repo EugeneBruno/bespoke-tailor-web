@@ -31,7 +31,7 @@ export default function Home() {
     <main className="min-h-screen bg-[#0B0B0B] text-gray-300 overflow-x-hidden">
       
       {/* 1. HERO SECTION */}
-      {/* ADJUSTED: Changed mobile padding from px-8 to px-6 for more breathing room */}
+      {/* Left SIde: Text*/}
       <section className="relative w-full min-h-[85vh] flex flex-col md:flex-row items-center justify-between px-6 md:px-24 py-12 md:py-20">
          
          <div className="md:w-1/2 z-10 flex flex-col items-start gap-6 mt-6 md:mt-0 w-full">
