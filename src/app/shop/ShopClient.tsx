@@ -25,13 +25,26 @@ export default function ShopClient() {
         const fetchCategoryImages = async () => {
             const imagesMap: Record<string, string> = {};
 
+            // 🔥 1. Get featured image for "ALL"
+            const { data: featured } = await supabase
+            .from("products")
+            .select("image")
+            .order("created_at", { ascending: false }) // latest product
+            .limit(1)
+            .single();
+
+            if (featured?.image) {
+            imagesMap["all"] = featured.image;
+            }
+
+            // 🔥 2. Get one image per category
             for (const cat of categories) {
             if (cat.slug === "all") continue;
 
             const { data } = await supabase
                 .from("products")
                 .select("image")
-                .eq("category", cat.name) 
+                .eq("category", cat.name)
                 .limit(1)
                 .single();
 
@@ -74,7 +87,7 @@ export default function ShopClient() {
                     <div key={cat.name} className="flex flex-col items-center opacity-30 cursor-not-allowed">
                     <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden relative mb-5 border-2 border-transparent">
                         <img
-                        src={categoryImages[cat.slug] || "/fallback.jpg"}
+                        src={categoryImages[cat.slug] || "/globe.svg"}
                         alt={cat.name}
                         className="w-full h-full object-cover object-top"
                         />
@@ -94,7 +107,7 @@ export default function ShopClient() {
                     >
                     <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden relative mb-5 transition-all duration-500 border-2 border-transparent group-hover:border-[#D4AF37] group-hover:shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                         <img 
-                        src={categoryImages[cat.slug] || "/fallback.jpg"} 
+                        src={categoryImages[cat.slug] || "/globe.svg"} 
                         alt={cat.name} 
                         className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
                         />
