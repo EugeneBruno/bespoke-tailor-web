@@ -3,13 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { formatPrice } from "@/lib/formatPrice";
-
-const collectionImages = [
-  "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1515347619152-00b12cb92a3e?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?q=80&w=800&auto=format&fit=crop",
-  "https://images.unsplash.com/photo-1550614000-4b95d4edfaea?q=80&w=800&auto=format&fit=crop",
-];
+import { supabase } from "@/utils/supabase";
 
 // export const metadata = {
 //   title: "Home",
@@ -17,15 +11,39 @@ const collectionImages = [
 // };
 
 export default function Home() {
+  const [collectionImages, setCollectionImages] = useState<string[]>([]);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
+    const fetchImages = async () =>{
+      const { data, error } = await supabase
+        .from("products")
+        .select("image")
+        .limit(5);
+
+      
+      if (!error && data) {
+        const images = data
+          .map((item) => item.image)
+          .filter(Boolean);
+
+        setCollectionImages(images);
+        }
+      };
+      
+    fetchImages();
+  }, []);
+
+
+  useEffect(() => {
+    if (collectionImages.length === 0) return;
+
     const interval = setInterval(() => {
       setCurrentImageIndex((prevIndex) => (prevIndex + 1) % collectionImages.length);
     }, 5000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [collectionImages]);
 
   return (
     <main className="min-h-screen bg-[#0B0B0B] text-gray-300 overflow-x-hidden">
@@ -36,7 +54,7 @@ export default function Home() {
          
          <div className="md:w-1/2 z-10 flex flex-col items-start gap-6 mt-6 md:mt-0 w-full">
            <h1 className="text-5xl sm:text-6xl md:text-7xl font-serif text-[#D4AF37] leading-tight tracking-wide">
-             The Art of <br /> Personalization.
+             The Art of <br /> Personalization
            </h1>
            <p className="text-base md:text-lg text-gray-400 max-w-md leading-relaxed">
              Expertly crafted garments tailored to your unique measurements. Discover the luxurious side of modern fashion.

@@ -1,20 +1,51 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { supabase } from "@/utils/supabase";
 
 const categories = [
-  { name: "All", slug: "all", image: "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=600&auto=format&fit=crop" },
-  { name: "Dresses", slug: "dresses", image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?q=80&w=600&auto=format&fit=crop" },
-  { name: "Skirts", slug: "skirts", image: "https://images.unsplash.com/photo-1583496920314-c15a92fc0781?q=80&w=600&auto=format&fit=crop" },
-  { name: "Bubu", slug: "bubu", image: "https://images.unsplash.com/photo-1605658625902-6028f08a4632?q=80&w=600&auto=format&fit=crop" }, 
-  { name: "Pants", slug: "pants", image: "https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?q=80&w=600&auto=format&fit=crop" },
-  { name: "Tops & Jackets", slug: "tops-and-jackets", image: "https://images.unsplash.com/photo-1593030761757-71fae45fa0e7?q=80&w=600&auto=format&fit=crop" },
-  { name: "Two Piece", slug: "two-piece", image: "https://images.unsplash.com/photo-1590559899731-a382839ceef2?q=80&w=600&auto=format&fit=crop" },
-  { name: "Kids", slug: "kids", image: "https://images.unsplash.com/photo-1519241047957-be31d7379a5d?q=80&w=600&auto=format&fit=crop" },
+  { name: "All", slug: "all" },
+  { name: "Dresses", slug: "dresses" },
+  { name: "Skirts", slug: "skirts" },
+  { name: "Bubu", slug: "bubu" },
+  { name: "Pants", slug: "pants" },
+  { name: "Tops & Jackets", slug: "tops-and-jackets" },
+  { name: "Two Piece", slug: "two-piece" },
+  { name: "Kids", slug: "kids" },
 ];
 
 export const metadata = {
   title: "Shop",
   description: "Explore luxury dresses, bespoke pieces and elegant designs.",
 };
+
+const [categoryImages, setCategoryImages] = useState<Record<string, string>>({});
+
+useEffect(() => {
+  const fetchCategoryImages = async () => {
+    const imagesMap: Record<string, string> = {};
+
+    for (const cat of categories) {
+      if (cat.slug === "all") continue;
+
+      const { data } = await supabase
+        .from("products")
+        .select("image")
+        .eq("category", cat.name) 
+        .limit(1)
+        .single();
+
+      if (data?.image) {
+        imagesMap[cat.slug] = data.image;
+      }
+    }
+
+    setCategoryImages(imagesMap);
+  };
+
+  fetchCategoryImages();
+}, []);
 
 export default function ShopLanding() {
   return (
@@ -43,7 +74,11 @@ export default function ShopLanding() {
                 // Disabled button for Kids
                 <div key={cat.name} className="flex flex-col items-center opacity-30 cursor-not-allowed">
                   <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden relative mb-5 border-2 border-transparent">
-                    <img src={cat.image} alt={cat.name} className="w-full h-full object-cover object-top" />
+                    <img
+                      src={categoryImages[cat.slug] || "/fallback.jpg"}
+                      alt={cat.name}
+                      className="w-full h-full object-cover object-top"
+                    />
                     <div className="absolute inset-0 bg-black/60"></div>
                     <div className="absolute inset-0 flex items-center justify-center p-2 text-center">
                       <span className="text-white text-[10px] md:text-xs tracking-widest uppercase font-serif drop-shadow-lg">{cat.name}</span>
@@ -60,7 +95,7 @@ export default function ShopLanding() {
                 >
                   <div className="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden relative mb-5 transition-all duration-500 border-2 border-transparent group-hover:border-[#D4AF37] group-hover:shadow-[0_0_15px_rgba(212,175,55,0.2)]">
                     <img 
-                      src={cat.image} 
+                      src={categoryImages[cat.slug] || "/fallback.jpg"} 
                       alt={cat.name} 
                       className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
                     />
