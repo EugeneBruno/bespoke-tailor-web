@@ -356,7 +356,7 @@ export default function AdminDashboard() {
                 <option>Dresses</option>
                 <option>Skirts</option>
                 <option>Bubu</option>
-                <option>Pants (Trousers)</option>
+                <option>Pants</option>
                 <option>Tops & Jackets</option>
                 <option>Two Piece</option>
               </select>
