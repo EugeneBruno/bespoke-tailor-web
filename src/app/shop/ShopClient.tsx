@@ -25,32 +25,30 @@ export default function ShopClient() {
         const fetchCategoryImages = async () => {
             const imagesMap: Record<string, string> = {};
 
-            // 🔥 1. Get featured image for "ALL"
             const { data: featured } = await supabase
-            .from("products")
-            .select("image")
-            .order("created_at", { ascending: false }) // latest product
-            .limit(1)
-            .single();
-
-            if (featured?.image) {
-            imagesMap["all"] = featured.image;
-            }
-
-            // 🔥 2. Get one image per category
-            for (const cat of categories) {
-            if (cat.slug === "all") continue;
-
-            const { data } = await supabase
                 .from("products")
                 .select("image")
-                .eq("category", cat.name)
+                .order("created_at", { ascending: false })
                 .limit(1)
                 .single();
 
-            if (data?.image) {
-                imagesMap[cat.slug] = data.image;
+            if (featured?.image) {
+                imagesMap["all"] = featured.image;
             }
+
+            for (const cat of categories) {
+                if (cat.slug === "all") continue;
+
+                const { data } = await supabase
+                    .from("products")
+                    .select("image")
+                    .eq("category", cat.name)
+                    .limit(1)
+                    .single();
+
+                if (data?.image) {
+                    imagesMap[cat.slug] = data.image;
+                }
             }
 
             setCategoryImages(imagesMap);
