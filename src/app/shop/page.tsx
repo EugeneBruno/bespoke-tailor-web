@@ -1,5 +1,4 @@
 import ShopClient from "./ShopClient";
-import { Metadata } from "next";
 
 export const metadata = {
   title: "Shop",
