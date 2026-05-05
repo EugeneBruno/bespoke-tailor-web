@@ -341,7 +341,7 @@ export default function AdminDashboard() {
 
               <input
                 required
-                type="text"
+                type="number"
                 placeholder="Price"
                 value={formData.price}
                 onChange={(e) => setFormData({ ...formData, price: e.target.value })}
